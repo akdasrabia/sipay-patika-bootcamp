@@ -48,6 +48,19 @@ namespace odev1.Controllers
             return blogList;
         }
 
+        [HttpGet("/list")]
+        public List<Blog> GetBlogsOrder([FromQuery] string name = "abc")
+        {
+            var blogList = BlogList.OrderBy(x => x.Title).ToList();
+            if (name != "abc")
+            {
+                blogList = BlogList.OrderByDescending(x => x.Title).ToList();
+                
+            }
+
+            return blogList;
+        }
+
         [HttpPost]
         public IActionResult AddBook([FromBody] Blog newBlog)
         {
@@ -77,7 +90,22 @@ namespace odev1.Controllers
                 return Ok();
 
             }
+        }
 
+        [HttpPatch]
+        public IActionResult UpdateBlogTitle(int id, [FromBody] string updatedTitle)
+        {
+            var blog = BlogList.SingleOrDefault(x => x.Id == id);
+            if (blog is null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                blog.Title = updatedTitle != default ? updatedTitle : blog.Title;
+                return Ok();
+
+            }
         }
 
 
