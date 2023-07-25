@@ -16,14 +16,12 @@ public class UpdateBookCommand
     public void Handle()
     {
         var book = _dbContext.Books.SingleOrDefault(x => x.Id == BookId);
-        if (book == null)
+        if (book is null)
         {
             throw new InvalidOperationException("Güncellenmek istenen kitap mevcut değil");
         }
 
         book.Title = Model.Title != default ? Model.Title : book.Title;
-        book.PublishDate = Model.PublishDate != default ? Model.PublishDate : book.PublishDate;
-        book.PageCount = Model.PageCount != default ? Model.PageCount : book.PageCount;
         book.GenreId = Model.GenreId != default ? Model.GenreId : book.GenreId;
         _dbContext.SaveChanges();
         
@@ -33,8 +31,6 @@ public class UpdateBookCommand
     {
         public string Title { get; set; }
         public int GenreId { get; set; }
-        public int PageCount { get; set; }
-        public DateTime PublishDate { get; set; }
     }
 
 }
